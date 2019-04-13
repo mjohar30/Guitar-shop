@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const SALT_I = 10
 const jwt = require('jsonwebtoken')
 
+//trim en email es para que no permita espacios
+
 require('dotenv').config()
 
     const userSchema = mongoose.Schema({
