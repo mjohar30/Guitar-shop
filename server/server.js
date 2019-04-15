@@ -1,4 +1,4 @@
-//1. Importaciones
+//1. IMPORTACIONES
 const express = require('express')
 const app = express()
 
@@ -6,16 +6,11 @@ const port = process.env.PORT || 3002
 
 const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
-const  { User } = require('./models/user')
-const { auth } = require('./middleware/auth')
-const { Brand } = require('./models/brand')
-const { admin } = require('./middleware/admin')
-const { Wood } = require('./models/wood')
 
 require('dotenv').config()
-  
 
-//Middlewares
+
+// 2. MIDDLEWARES
 //urlencoded sirve para leer los query params
 app.use(express.urlencoded({extended: true}))
 //para leer los json sin problemas
@@ -23,7 +18,14 @@ app.use(express.json())
 //Inyectar cookies al cliente
 app.use(cookieParser())
 
-//Rutas
+//3. MODELOS
+const  { User } = require('./models/user')
+const { auth } = require('./middleware/auth')
+const { Brand } = require('./models/brand')
+const { admin } = require('./middleware/admin')
+const { Wood } = require('./models/wood')
+
+// 4. RUTAS
   app.post('/api/users/register', (req, res) => {
     const user = new User(req.body)
     user.save((err, doc) => {
@@ -37,6 +39,7 @@ app.use(cookieParser())
 app.post('/api/users/login', (req, res) => {
     // 1. Encuentra el correo
         User.findOne({'email': req.body.email}, (err,user) => {
+            if(err) return res.send(err)
             if(!user) return res.json({loginSuccess: false, message: 'Auth fallida, email no encontrado'})
 
     // 2. Obtén el password y compruébalo
@@ -123,7 +126,7 @@ mongoose.connect(process.env.DATABASE, { useNewUrlParser: true }, (err) => {
     console.log("Conectado a MongoDB")
   })
 
-// 5. Listeners
+// 5. LISTENERS
 app.listen(port, () => {
     console.log(`Servidor corriendo en el puerto ${port}`)
   })

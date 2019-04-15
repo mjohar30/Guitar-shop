@@ -54,6 +54,8 @@ require('dotenv').config()
                 this.password = hash;
                 next();
             } catch(err){
+                //next ayuda a que aunque haya un error, el middleware te pase a la ruta
+                //next es de mongoose
                 return next(err);
             }
         }
